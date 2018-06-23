@@ -10,12 +10,14 @@ import static org.junit.Assert.*;
  * Created by michelbrueger on 23.06.18.
  */
 public class QuicksortLoesungTest {
-    Quicksort<Integer, String> qsl1;
+    Quicksort<Integer, String> qslMedian;
     PivotStrategie psMedian;
     PivotStrategie psRandom;
     PivotStrategie psLast;
     SchluesselWertPaar<Integer, String>[] daten5;
     SchluesselWertPaar<Integer, String>[] daten4;
+    SchluesselWertPaar<Integer, String>[] daten1;
+    SchluesselWertPaar<Integer, String>[] daten2;
 
     SchluesselWertPaar<Integer, String> swp1;
     SchluesselWertPaar<Integer, String> swp2;
@@ -25,10 +27,10 @@ public class QuicksortLoesungTest {
 
     @Before
     public void setUp() throws Exception {
-        qsl1 = new QuicksortLoesung<>(psMedian);
         psMedian = new PivotStrategyMedian();
         psRandom = new PivotStrategyRandom();
         psLast = new PivotStrategyLast();
+        qslMedian = new QuicksortLoesung<>(psMedian);
         swp1 = new SchluesselWertPaar<>(1, "Eins");
         swp2 = new SchluesselWertPaar<>(2, "Zwei");
         swp3 = new SchluesselWertPaar<>(3, "Drei");
@@ -45,6 +47,11 @@ public class QuicksortLoesungTest {
         daten4[1] = swp1;
         daten4[2] = swp4;
         daten4[3] = swp2;
+        daten1 = new SchluesselWertPaar[1];
+        daten1[0] = swp1;
+        daten2 = new SchluesselWertPaar[2];
+        daten2[0] = swp1;
+        daten2[1] = swp2;
     }
 
     @Test
@@ -53,10 +60,16 @@ public class QuicksortLoesungTest {
 
     @Test
     public void sortiere() throws Exception {
-        System.out.println(qsl1.pivotStrategy);
-        System.out.println(qsl1);
-//        qsl1.sortiere(daten5);
+//        System.out.println(qslMedian.pivotStrategy);
+//        System.out.println(qslMedian);
+//        qslMedian.sortiere(daten5);
 //        assertEquals(swp1, daten5[0]);
+        qslMedian.sortiere(daten1);
+        assertEquals(swp1, daten1[0]);
+        qslMedian.sortiere(daten2);
+        assertEquals(swp1, daten2[0]);
+        assertEquals(swp2, daten2[1]);
+
     }
 
 }

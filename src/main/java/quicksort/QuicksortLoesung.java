@@ -49,7 +49,7 @@ public class QuicksortLoesung<T extends Comparable<T>, U> extends Quicksort {
         while(links < rechts){
             T pivotKey = (T) a[pivotIndex].getSchluessel();                             // Nochmal drüber nachdenken wo man das plazieren könnte
             while(a[links].getSchluessel().compareTo(pivotKey) < 0) links += 1;
-            while(a[rechts].getSchluessel().compareTo(pivotKey) > 0) rechts += 1;
+            while(a[rechts].getSchluessel().compareTo(pivotKey) > 0) rechts -= 1;
             if(links<rechts) swap(a,links,rechts);
         }
         if(a[links].getSchluessel().compareTo(a[pivotIndex].getSchluessel()) > 0) swap(a, links, pivotIndex);
