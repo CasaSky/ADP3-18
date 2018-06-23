@@ -1,5 +1,9 @@
 package com.company;
 
+import common.SchluesselWertPaar;
+import quicksort.PivotStrategie;
+import quicksort.Quicksort;
+
 /**
  * Created by michelbrueger on 21.06.18.
  */
