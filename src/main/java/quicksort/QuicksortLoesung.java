@@ -1,4 +1,4 @@
-package com.company;
+package quicksort;
 
 import common.SchluesselWertPaar;
 import quicksort.PivotStrategie;
