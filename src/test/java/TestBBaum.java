@@ -30,7 +30,7 @@ public class TestBBaum {
         System.out.println(baum);
         baum.einfuegen(12, "12");
         System.out.println(baum);
-        baum.einfuegen(25, "25");
+       baum.einfuegen(25, "25");
         System.out.println(baum);
         baum.einfuegen(20, "20");
         System.out.println(baum);
@@ -38,12 +38,13 @@ public class TestBBaum {
         System.out.println(baum);
         baum.einfuegen(24, "24");
         System.out.println(baum);
+        // Tiefer Split ;)
         baum.einfuegen(43, "43");
         System.out.println(baum);
         assertTrue(baum.validieren());
-        assertEquals(7, baum.getAnzahlSchluessel());
+        assertEquals(8, baum.getAnzahlSchluessel());
         List<SchluesselWertPaar<Integer, String>> preOrderElemente = baum.getPreOrder();
-        assertEquals(7, preOrderElemente.size());
+        assertEquals(8, preOrderElemente.size());
         for (int i = 0; i < preOrderElemente.size() - 1; i++) {
             assertTrue(preOrderElemente.get(i).getSchluessel().
                     compareTo(preOrderElemente.get(i + 1).getSchluessel()) <= 0);

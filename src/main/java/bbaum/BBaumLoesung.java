@@ -15,14 +15,18 @@ public class BBaumLoesung<T extends Comparable<T>, U> extends BBaum {
         if (wurzel==null) {
             wurzel = new BBaumKnoten(paar);
         } else if (wurzel.istBlattknoten()) {
-            BBaumKnoten kind = new BBaumKnoten(paar);
-            int index = schluessel.compareTo(wurzel.getSchluesselWertPaar(0).getSchluessel()) < 0 ? 0 : 1; // egal ob der wert bereits vorhanden
-            wurzel.setKind(index, kind);
+            wurzel.addSchluesselWertPaar(suchePassenderIndex(wurzel, paar.getSchluessel()), paar);
+            wurzel = limitPruefungUndSplit(wurzel);
         } else {
             int kindIndex = suchePassendesKind(wurzel, paar.getSchluessel());
             BBaumKnoten kind = wurzel.getKind(kindIndex);
             kind = rekursivesEinfuegen(kind, paar);
-            wurzel.setKind(kindIndex, kind);
+            // Loest Stackoverflow -_-
+            if (kind.equals(wurzel)) {
+                wurzel = kind;
+            } else {
+                wurzel.setKind(kindIndex, kind);
+            }
         }
     }
 
@@ -31,10 +35,9 @@ public class BBaumLoesung<T extends Comparable<T>, U> extends BBaum {
         if (knoten == null) {
             return new BBaumKnoten(paar);
         } else if (knoten.istBlattknoten()) {
-            //TODO die genaue Position ermitteln
-            int index = suchePassenderIndex(knoten, paar);
+            int index = suchePassenderIndex(knoten, paar.getSchluessel());
             knoten.addSchluesselWertPaar(index, paar);
-            return rekursiveLimitAndSplitPruefung(knoten);
+            return limitPruefungUndSplit(knoten);
         } else {
             int kindIndex = suchePassendesKind(knoten, paar.getSchluessel());
             BBaumKnoten kind = knoten.getKind(kindIndex);
@@ -42,32 +45,11 @@ public class BBaumLoesung<T extends Comparable<T>, U> extends BBaum {
         }
     }
 
-    private int suchePassenderIndex(BBaumKnoten knoten, SchluesselWertPaar paar) {
-        int anzahlSchluesselPaare = knoten.getAnzahlSchluesselWertPaare()-1;
-        if (paar.getSchluessel().compareTo(knoten.getSchluesselWertPaar(0).getSchluessel()) < 0) {
-            return 0;
-        }
-        for (int i=1; i<knoten.getAnzahlSchluesselWertPaare()-1; i++) {
-            // Laesst keine Duplikate zu
-            if (paar.getSchluessel().compareTo(knoten.getSchluesselWertPaar(i-1).getSchluessel()) > 0
-                    && paar.getSchluessel().compareTo(knoten.getSchluesselWertPaar(i).getSchluessel()) < 0) {
-                return i;
-            }
-        }
-        return anzahlSchluesselPaare+1;
+    private boolean isLimitReached(BBaumKnoten knoten) {
+        return knoten.getAnzahlSchluesselWertPaare() > ordnung * 2 - 1;
     }
 
-    private int suchePassendesKind(BBaumKnoten knoten, Comparable schluessel) {
-        for (int i = 0; i < knoten.getAnzahlSchluesselWertPaare(); i++) {
-            SchluesselWertPaar paar = knoten.getSchluesselWertPaar(i);
-            if (schluessel.compareTo(paar.getSchluessel()) < 0) {
-                return i;
-            }
-        }
-        return knoten.getAnzahlKinder()-1; //Default falls schluessel der Groesste ist
-    }
-
-    private BBaumKnoten rekursiveLimitAndSplitPruefung(BBaumKnoten knoten) {
+    private BBaumKnoten limitPruefungUndSplit(BBaumKnoten knoten) {
         if (isLimitReached(knoten)) {
             int mid = knoten.getAnzahlSchluesselWertPaare()/2;
             SchluesselWertPaar teiler = knoten.getSchluesselWertPaar(mid);
@@ -90,15 +72,42 @@ public class BBaumLoesung<T extends Comparable<T>, U> extends BBaum {
                 elternknoten.setKind(1, rechterKnoten);
                 return elternknoten;
             } else {
-                elternknoten.schluesselUndKindEinfuegen(linkerKnoten, teiler, rechterKnoten);
-                return rekursiveLimitAndSplitPruefung(elternknoten);
+                //elternknoten.schluesselUndKindEinfuegen(linkerKnoten, teiler, rechterKnoten);
+                elternknoten.addSchluesselWertPaar(suchePassenderIndex(elternknoten, teiler.getSchluessel()), teiler);
+                elternknoten.setKind(0, linkerKnoten);
+                elternknoten.setKind(1, rechterKnoten);
+                return limitPruefungUndSplit(elternknoten);
             }
         }
         return knoten;
     }
 
-    private boolean isLimitReached(BBaumKnoten knoten) {
-        return knoten.getAnzahlSchluesselWertPaare() > ordnung * 2 - 1;
+    private int suchePassendesKind(BBaumKnoten knoten, Comparable schluessel) {
+        for (int i = 0; i < knoten.getAnzahlSchluesselWertPaare(); i++) {
+            SchluesselWertPaar paar = knoten.getSchluesselWertPaar(i);
+            if (schluessel.compareTo(paar.getSchluessel()) < 0) {
+                return i;
+            }
+        }
+        return knoten.getAnzahlKinder()-1; //Default falls schluessel der Groesste ist
+    }
+
+    private int suchePassenderIndex(BBaumKnoten knoten, Comparable schluessel) {
+        int anzahlSchluesselPaare = knoten.getAnzahlSchluesselWertPaare();
+
+        if (schluessel.compareTo(knoten.getSchluesselWertPaar(0).getSchluessel()) < 0) {
+            return 0;
+        } else if (anzahlSchluesselPaare == 1) {
+            return 1;
+        } else {
+            for (int i=0; i<anzahlSchluesselPaare-1; i++) {
+                if (schluessel.compareTo(knoten.getSchluesselWertPaar(i).getSchluessel()) > 0
+                        && schluessel.compareTo(knoten.getSchluesselWertPaar(i+1).getSchluessel()) < 0) {
+                    return i+1;
+                }
+            }
+        }
+        return -1;
     }
 
 
