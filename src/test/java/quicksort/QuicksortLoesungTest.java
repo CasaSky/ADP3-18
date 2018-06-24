@@ -60,10 +60,8 @@ public class QuicksortLoesungTest {
 
     @Test
     public void sortiere() throws Exception {
-//        System.out.println(qslMedian.pivotStrategy);
-//        System.out.println(qslMedian);
-//        qslMedian.sortiere(daten5);
-//        assertEquals(swp1, daten5[0]);
+        qslMedian.sortiere(daten5);
+        assertEquals(swp1, daten5[0]);
         qslMedian.sortiere(daten1);
         assertEquals(swp1, daten1[0]);
         qslMedian.sortiere(daten2);
@@ -72,4 +70,13 @@ public class QuicksortLoesungTest {
 
     }
 
+    @Test
+    public void quickSortTest() throws Exception {
+        qslMedian.quickSort(daten5);
+        assertEquals(swp1, daten5[0]);
+        assertEquals(swp2, daten5[1]);
+        assertEquals(swp3, daten5[2]);
+        assertEquals(swp4, daten5[3]);
+        assertEquals(swp5, daten5[4]);
+    }
 }

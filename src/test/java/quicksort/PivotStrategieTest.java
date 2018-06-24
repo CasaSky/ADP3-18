@@ -65,6 +65,8 @@ public class PivotStrategieTest {
         assertEquals(4, psMedian.getIndex(daten5, 0, daten5.length-1));
         assertEquals(3, psMedian.getIndex(daten4, 0, daten4.length-1));
         assertEquals(0, psMedian.getIndex(daten1, 0, daten1.length-1));
+        assertEquals(0, psMedian.getIndex(daten1, 0, 0));
+
 
         /*
         Tests für PivotStrategyRandom

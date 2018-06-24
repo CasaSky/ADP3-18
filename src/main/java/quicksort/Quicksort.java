@@ -26,6 +26,8 @@ public abstract class Quicksort<T extends Comparable<T>, U> {
      */
     public abstract void sortiere(SchluesselWertPaar<T, U>[] a);
 
+    public abstract void quickSort(SchluesselWertPaar<T, U>[] arr);
+
 
 
 }

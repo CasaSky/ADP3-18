@@ -19,7 +19,7 @@ public class SchluesselWertPaar<T extends Comparable<T>, U> {
         this.wert = wert;
     }
 
-    public T getSchluessel() {
+    public  T getSchluessel() {
         return schluessel;
     }
 
