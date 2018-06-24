@@ -38,6 +38,8 @@ public class TestBBaum {
         System.out.println(baum);
         baum.einfuegen(24, "24");
         System.out.println(baum);
+        baum.einfuegen(43, "43");
+        System.out.println(baum);
         assertTrue(baum.validieren());
         assertEquals(7, baum.getAnzahlSchluessel());
         List<SchluesselWertPaar<Integer, String>> preOrderElemente = baum.getPreOrder();
